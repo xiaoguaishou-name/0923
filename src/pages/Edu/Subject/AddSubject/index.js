@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, Form, Input, Button, Select,Divider } from "antd";
+import { Card, Form, Input, Button, Select,Divider ,message} from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { reqGetSubject } from "@api/edu/subject";
+import { reqGetSubject ,reqAddSubject} from "@api/edu/subject";
 //表单布局属性
 const layout = {
 	// antd把一个宽度分为24份
@@ -19,13 +19,14 @@ const layout = {
 const Option = Select.Option;
 
 export default class AddSubject extends Component {
+  page = 1
   state = {
     total:0,
     items: [],
   };
   // 下拉列表数据请求
   async componentDidMount(){
-    const res = await reqGetSubject(1,5)
+    const res = await reqGetSubject(this.page++,5)
     this.setState({
       total:res.total,
       items:res.items
@@ -34,7 +35,17 @@ export default class AddSubject extends Component {
   // 点击加载更多
   handleGetSubject = async() =>{
     const res = await reqGetSubject(this.page++,5)
-    
+    const newItems = [...this.state.items,...res.items]
+    this.setState({
+      items:newItems
+    })
+  }
+  // 点击提交新增课程分类数据
+  onFinish = async(value) =>{
+    // console.log(value)
+    await reqAddSubject(value.subjectname,value.parentid)
+    message.success('添加成功')
+    this.props.history.push('/edu/subject/list')
   }
 	render() {
 		return (
@@ -51,7 +62,7 @@ export default class AddSubject extends Component {
 				<Form
 					{...layout}
 					name="subject"
-					//onFinish={onFinish}
+					onFinish={this.onFinish}
 					//onFinishFailed={onFinishFailed}
 				>
 					<Form.Item
@@ -101,7 +112,7 @@ export default class AddSubject extends Component {
 
 					<Form.Item>
 						<Button type="primary" htmlType="submit">
-							Submit
+							提交
 						</Button>
 					</Form.Item>
 				</Form>
