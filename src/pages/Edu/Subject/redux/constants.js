@@ -1,0 +1,5 @@
+// 常量
+
+export const GET_SUBJECT_LIST = 'GET_SUBJECT_LIST'
+
+export const GET_SEC_SUBJECT_LIST = 'GET_SEC_SUBJECT_LIST'
