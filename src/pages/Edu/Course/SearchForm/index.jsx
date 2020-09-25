@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Cascader, Button } from "antd";
 
+
 import "./index.less";
 
 const { Option } = Select;
 
-function SearchForm() {
+function SearchForm(props) {
   const [form] = Form.useForm();
 
   const [options, setOptions] = useState([
@@ -49,7 +50,6 @@ function SearchForm() {
   const resetForm = () => {
     form.resetFields();
   };
-
   return (
     <Form layout="inline" form={form}>
       <Form.Item name="title" label="标题">
@@ -64,6 +64,7 @@ function SearchForm() {
           <Option value="lucy1">Lucy1</Option>
           <Option value="lucy2">Lucy2</Option>
           <Option value="lucy3">Lucy3</Option>
+          
         </Select>
       </Form.Item>
       <Form.Item name="subject" label="分类">

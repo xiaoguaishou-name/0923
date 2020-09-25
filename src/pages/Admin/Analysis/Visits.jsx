@@ -8,7 +8,6 @@ class Visits extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
       const visits = [];
       let year = 1986;
 
@@ -22,7 +21,6 @@ class Visits extends Component {
       this.setState({
         visits
       });
-    }, 1000);
   }
 
   render() {

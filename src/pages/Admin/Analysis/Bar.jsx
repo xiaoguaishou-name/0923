@@ -7,7 +7,7 @@ export default class Bar extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
+
       this.setState({
         numbers: [
           {
@@ -72,7 +72,6 @@ export default class Bar extends Component {
           }
         ]
       });
-    }, 1000);
   }
 
   render() {

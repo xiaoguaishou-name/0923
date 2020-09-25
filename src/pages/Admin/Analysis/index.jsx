@@ -19,11 +19,9 @@ export default class Analysis extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
       this.setState({
         loading: false,
       });
-    }, 2000);
   }
 
   render() {

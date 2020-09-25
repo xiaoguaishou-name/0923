@@ -15,19 +15,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import { connect } from "react-redux";
 import SearchForm from "./SearchForm";
-
+import {getLessonList} from './redux'
 import "./index.less";
 
 dayjs.extend(relativeTime);
 
 @connect(
   (state) => ({
-    // courseList: state.courseList
-    // permissionValueList: filterPermissions(
-    //   state.course.permissionValueList,
-    //   "Course"
-    // )
-  })
+    chapterList:state.chapterList.chapterList,
+    permissionValueList:state.user.permissionValueList
+  }),{getLessonList}
   // { getcourseList }
 )
 class Chapter extends Component {
@@ -89,10 +86,22 @@ class Chapter extends Component {
       selectedRowKeys,
     });
   };
-
+  // 点击+下拉展示课时回调
+  handleGetLesson = (expand,record) =>{
+    if(expand){
+      // console.log(expand)
+      this.props.getLessonList(record._id)
+    }
+  }
+  // 点击去到新增课时回调
+  handleGoToAddLesson = () =>{
+    console.log(this.props)
+    this.props.history.push('/edu/chapter/addlesson')
+  }
   render() {
     const { previewVisible, previewImage, selectedRowKeys } = this.state;
-
+    const permissionValueList = this.props.permissionValueList
+    const index = permissionValueList.indexOf('chapter.addlesson')
     const columns = [
       {
         title: "章节名称",
@@ -106,16 +115,24 @@ class Chapter extends Component {
         },
       },
       {
+        title:"视频",
+        render:(record)=>{
+          if(record.free){
+            return <Button type="ghost">预览</Button>
+          }
+          return null
+        }
+      },
+      {
         title: "操作",
         width: 300,
         fixed: "right",
         render: (data) => {
-          if ("free" in data) {
             return (
               <div>
                 <Tooltip title="查看详情">
-                  <Button>
-                    <SettingOutlined />
+                  <Button type="primary">
+                    <PlusOutlined />
                   </Button>
                 </Tooltip>
                 <Tooltip title="更新章节">
@@ -130,7 +147,6 @@ class Chapter extends Component {
                 </Tooltip>
               </div>
             );
-          }
         },
       },
     ];
@@ -257,10 +273,11 @@ class Chapter extends Component {
           <div className="course-table-header">
             <h3>课程章节列表</h3>
             <div>
-              <Button type="primary" style={{ marginRight: 10 }}>
+              {index > -1 && (<Button type="primary" style={{ marginRight: 10 }}
+              onClick={this.handleGoToAddLesson}>
                 <PlusOutlined />
                 <span>新增</span>
-              </Button>
+              </Button>)}
               <Button type="danger" style={{ marginRight: 10 }}>
                 <span>批量删除</span>
               </Button>
@@ -290,8 +307,9 @@ class Chapter extends Component {
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={data}
-            rowKey="id"
+            dataSource={this.props.chapterList}
+            rowKey="_id"
+            expandable={{onExpand:this.handleGetLesson}}
           />
         </div>
 

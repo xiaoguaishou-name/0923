@@ -18,7 +18,6 @@ export default class Search extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
       this.setState({
         visits: [
           {
@@ -103,7 +102,6 @@ export default class Search extends Component {
           },
         ],
       });
-    }, 1000);
   }
 
   render() {
